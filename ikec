@@ -1,0 +1,34 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides: ikec
+# Required-Start: $network $syslog
+# Required-Stop: $network $syslog
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Description: Start ikec
+### END INIT INFO
+
+SESSIONNAME=ikecsession
+SITENAME=$sitename
+VPNUSER=$vpnusername
+VPNPASS=$vpnpassword
+
+
+case "$1" in
+start)
+echo "Open ikec Connection..."
+screen -S $SESSIONNAME -d -m ikec -r $SITENAME -u $VPNUSER -p $VPNPASS -a
+;;
+
+stop)
+echo "Closing ikec Connection..."
+su $RUNAS -c "screen -S $SESSIONNAME -X quit"
+;;
+
+*)
+echo "Allowed actions"
+echo "Syntax: $0 {start|stop}"
+exit 1
+;;
+
+esac
